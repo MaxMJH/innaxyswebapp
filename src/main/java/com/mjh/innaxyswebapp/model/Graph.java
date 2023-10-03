@@ -2,7 +2,6 @@ package com.mjh.innaxyswebapp.model;
 
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.HashMap;
 import java.util.Map;
@@ -12,12 +11,18 @@ import java.util.Objects;
 @Component
 public class Graph {
 	/*---- Fields ----*/
-	private Map<Node, List<Node>> adjacencyList;
+	private List<Edge> edges;
+	private Map<Node, Map<Node, Integer>> adjacencyList;
 	
 	/*---- Constructor ----*/
 	public Graph(List<Edge> edges) {
+		this.edges = edges;
 		this.adjacencyList = new HashMap<>();
-		
+		this.createAdjacencyList();
+	}
+	
+	/*---- Method ----*/
+	public void createAdjacencyList() {
 		// Iterate through each edge to create a graph's adjacency list.
 		for(Edge edge : edges) {
 			// Get the current edge's source and target.
@@ -27,32 +32,40 @@ public class Graph {
 			// Check if the source is contained within the map.
 			if(this.adjacencyList.containsKey(source)) {
 				// If so, add the target to the existing source.
-				this.adjacencyList.get(source).add(target);
+				this.adjacencyList.get(source).put(target, edge.getDistance());
 			} else {
 				// If not, add the source to the map.
-				this.adjacencyList.put(source, new ArrayList<>());
-				this.adjacencyList.get(source).add(target);
+				this.adjacencyList.put(source, new HashMap<>());
+				this.adjacencyList.get(source).put(target, edge.getDistance());
 			}
-			
+					
 			// As the graph is undirected, also need to add the source to the target node.
 			// Check if the target is contained within the map.
 			if(this.adjacencyList.containsKey(target)) {
 				// If so, add the source to the existing target.
-				this.adjacencyList.get(target).add(source);
+				this.adjacencyList.get(target).put(source, edge.getDistance());
 			} else {
 				// If not, add the target to the map.
-				this.adjacencyList.put(target, new ArrayList<>());
-				this.adjacencyList.get(target).add(source);
+				this.adjacencyList.put(target, new HashMap<>());
+				this.adjacencyList.get(target).put(source, edge.getDistance());
 			}
 		}
 	}
 	
-	/*---- Getter and Setter ----*/
-	public Map<Node, List<Node>> getAdjacencyList() {
+	/*---- Getters and Setters ----*/
+	public List<Edge> getEdges() {
+		return this.edges;
+	}
+	
+	public void setEdges(List<Edge> edges) {
+		this.edges = edges;
+	}
+	
+	public Map<Node, Map<Node, Integer>> getAdjacencyList() {
 		return this.adjacencyList;
 	}
 	
-	public void setAdjacencyList(Map<Node, List<Node>> adjacencyList) {
+	public void setAdjacencyList(Map<Node, Map<Node, Integer>> adjacencyList) {
 		this.adjacencyList = adjacencyList;
 	}
 
@@ -84,12 +97,10 @@ public class Graph {
 		builder.append("Adjacency List:\n");
 		
 		for(Node source : this.adjacencyList.keySet()) {
-			builder.append(source.getName());
-			builder.append(" --> ");
+			builder.append(String.format("%s --> ", source.getName()));
 			
-			for(Node target : this.adjacencyList.get(source)) {
-				builder.append(target.getName());
-				builder.append(", ");
+			for(Node target : this.adjacencyList.get(source).keySet()) {			
+				builder.append(String.format("%s (%d), ", target.getName(), this.adjacencyList.get(source).get(target)));
 			}
 			builder.deleteCharAt(builder.lastIndexOf(", "));
 			builder.append("\n");

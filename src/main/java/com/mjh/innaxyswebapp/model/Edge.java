@@ -14,6 +14,10 @@ public class Edge {
 		this(new Node(), new Node(), 0);
 	}
 	
+	public Edge(Node source, Node target) {
+		this(source, target, 0);
+	}
+	
 	public Edge(Node source, Node target, int distance) {
 		this.source = source;
 		this.target = target;
@@ -62,7 +66,7 @@ public class Edge {
 		
 		Edge other = (Edge) obj;
 		
-		return Objects.equals(this.source, other.source) && Objects.equals(this.target, target) && Objects.equals(this.distance, other.distance);
+		return Objects.equals(this.source, other.source) && Objects.equals(this.target, target);
 	}
 
 	@Override 
