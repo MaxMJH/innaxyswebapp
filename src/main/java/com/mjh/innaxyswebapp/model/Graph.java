@@ -3,25 +3,31 @@ package com.mjh.innaxyswebapp.model;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.PriorityQueue;
+import java.util.Queue;
 
 // TODO Add JavaDoc comments.
 @Component
 public class Graph {
 	/*---- Fields ----*/
 	private List<Edge> edges;
+	private List<Node> nodes;
 	private Map<Node, Map<Node, Integer>> adjacencyList;
 	
 	/*---- Constructor ----*/
-	public Graph(List<Edge> edges) {
+	public Graph(List<Edge> edges, List<Node> nodes) {
 		this.edges = edges;
+		this.nodes = nodes;
 		this.adjacencyList = new HashMap<>();
 		this.createAdjacencyList();
 	}
 	
-	/*---- Method ----*/
+	/*---- Methods ----*/
 	public void createAdjacencyList() {
 		// Iterate through each edge to create a graph's adjacency list.
 		for(Edge edge : edges) {
@@ -52,6 +58,54 @@ public class Graph {
 		}
 	}
 	
+	public List<Node> shortestPath(Node source, Node target) {
+		Map<Node, Integer> distances = new HashMap<>(this.nodes.size());
+		Map<Node, Node> previous = new HashMap<>(this.nodes.size());
+		Queue<Node> queue = new PriorityQueue<>(new Comparator<Node>() {
+			@Override
+			public int compare(Node o1, Node o2) {
+				int o1Distance = distances.get(o1);
+				int o2Distance = distances.get(o2);
+				return Integer.compare(o1Distance, o2Distance);
+			}
+		});
+		
+		for(Node node : this.nodes) {
+			distances.put(node, Integer.MAX_VALUE);
+			previous.put(node, null);
+			queue.add(node);
+		}
+		
+		distances.put(source, 0);
+		
+		while(!queue.isEmpty()) {
+			Node currentNode = queue.poll();
+			
+			for(Node neighbour : this.adjacencyList.get(currentNode).keySet()) {
+				int length = distances.get(currentNode) + this.adjacencyList.get(currentNode).get(neighbour);
+				
+				if(length < distances.get(neighbour)) {
+					distances.put(neighbour, length);
+					previous.put(neighbour, currentNode);
+					queue.remove(neighbour);
+					queue.add(neighbour);
+				}	
+			}
+		}
+		
+		List<Node> path = new ArrayList<>();
+		
+		if(previous.get(target) != null || target == source) {
+			while(target != null) {
+				path.add(target);
+				target = previous.get(target);
+			}
+		}
+		
+		return path;
+	}
+	
+	
 	/*---- Getters and Setters ----*/
 	public List<Edge> getEdges() {
 		return this.edges;
@@ -59,6 +113,14 @@ public class Graph {
 	
 	public void setEdges(List<Edge> edges) {
 		this.edges = edges;
+	}
+	
+	public List<Node> getNodes() {
+		return this.nodes;
+	}
+	
+	public void setNodes(List<Node> nodes) {
+		this.nodes = nodes;
 	}
 	
 	public Map<Node, Map<Node, Integer>> getAdjacencyList() {
