@@ -19,12 +19,14 @@ public class Graph {
 	private List<Edge> edges;
 	private List<Node> nodes;
 	private Map<Node, Map<Node, Integer>> adjacencyList;
+	private Timer timer;
 	
 	/*---- Constructor ----*/
 	public Graph(List<Edge> edges, List<Node> nodes) {
 		this.edges = edges;
 		this.nodes = nodes;
 		this.adjacencyList = new HashMap<>();
+		this.timer = new Timer();
 		this.createAdjacencyList();
 	}
 	
@@ -59,7 +61,10 @@ public class Graph {
 		}
 	}
 	
-	public List<Node> shortestPath(Node source, Node target) {
+	public Map<Node, Node> calculateShortestPaths(Node source) {
+		// Set the start time.
+		this.timer.addStartTime(System.nanoTime());
+		
 		// Map to store all nodes and their distances from the source.
 		Map<Node, Integer> distances = new HashMap<>(this.nodes.size());
 		
@@ -117,27 +122,61 @@ public class Graph {
 				}	
 			}
 		}
+
+		// Set the stop time.
+		this.timer.addStopTime(System.nanoTime());
+		
+		return previous;
+	}
+	
+	public List<Node> getShortestPath(Map<Node, Node> shortestPaths, Node source, Node target) {
+		// Set the start time.
+		this.timer.addStartTime(System.nanoTime());
 		
 		// List to store the shortest path from source to target.
 		List<Node> path = new ArrayList<>();
-		
-		// Check to see if the target node exists in previously visited nodes map, or is equal to source.
-		if(previous.get(target) != null || target == source) {
-			// Iterate through each node that contains the target as its key.
+				
+		// Check to see if the target node exists in previously shortest paths from source map, or is equal to source.
+		if(shortestPaths.get(target) != null || target == source) {
+			// Iterate through each node until the source is reached (null after source).
 			while(target != null) {
-				// Add the node to the path, then get the next shortest node until the target is reached.
+				// Add the node to the path, then get the next shortest node until the source is reached.
 				path.add(target);
-				target = previous.get(target);
+				target = shortestPaths.get(target);
 			}
 		}
-		
+				
 		// As the algorithm returns the path from target to source, reverse the list.
 		Collections.reverse(path);
+				
+		// Set the stop time.
+		this.timer.addStopTime(System.nanoTime());
 		
 		// Return the shortest path from source to target.
 		return path;
 	}
 	
+	public ShortestPath getPathMetadata(List<Node> path) {
+		// Set variables to find the total distance and total edges for each node in the shortest path.
+		int totalDistance = 0;
+		int totalEdges = 0;
+		
+		// Iterate through each node in the shortest path, finding their overall total distance and edges.
+		for(int i = 0, j = 1; i < path.size() - 1; i++, j++) {
+			// Get current node and its adjacent neighbour.
+			Node currentNode = path.get(i);
+			Node neighbourNode = path.get(j);
+			
+			// Use the adjacency list to find the distance between the two nodes.
+			totalDistance += this.adjacencyList.get(currentNode).get(neighbourNode);
+			
+			// As two nodes are being processed at once, assume an edge.
+			totalEdges++;
+		}
+		
+		// Return the shortest path from source to target.
+		return new ShortestPath(path, totalDistance, totalEdges, this.timer.getTotalTime());
+	}
 	
 	/*---- Getters and Setters ----*/
 	public List<Edge> getEdges() {
@@ -162,6 +201,14 @@ public class Graph {
 	
 	public void setAdjacencyList(Map<Node, Map<Node, Integer>> adjacencyList) {
 		this.adjacencyList = adjacencyList;
+	}
+	
+	public Timer getTimer() {
+		return this.timer;
+	}
+	
+	public void setTimer(Timer timer) {
+		this.timer = timer;
 	}
 
 	/*---- Overridden Methods ----*/
