@@ -10,14 +10,14 @@ public class ShortestPath {
 	private List<Node> shortestPath;
 	private int totalDistance;
 	private int totalEdges;
-	private long totalCalculationTime;
+	private double totalCalculationTime;
 	
 	/*---- Constructors ----*/
 	public ShortestPath() {
 		this(new ArrayList<>(), 0, 0, 0);
 	}
 	
-	public ShortestPath(List<Node> shortestPath, int totalDistance, int totalEdges, long totalCalculationTime) {
+	public ShortestPath(List<Node> shortestPath, int totalDistance, int totalEdges, double totalCalculationTime) {
 		this.shortestPath = shortestPath;
 		this.totalDistance = totalDistance;
 		this.totalEdges = totalEdges;
@@ -49,11 +49,11 @@ public class ShortestPath {
 		this.totalEdges = totalEdges;
 	}
 	
-	public long getTotalCalculationTime() {
+	public double getTotalCalculationTime() {
 		return this.totalCalculationTime;
 	}
 	
-	public void setTotalCalculationTime(long totalCalculationTime) {
+	public void setTotalCalculationTime(double totalCalculationTime) {
 		this.totalCalculationTime = totalCalculationTime;
 	}
 	
