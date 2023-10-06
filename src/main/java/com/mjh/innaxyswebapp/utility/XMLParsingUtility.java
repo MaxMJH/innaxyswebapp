@@ -22,19 +22,54 @@ import com.mjh.innaxyswebapp.model.Edge;
 import com.mjh.innaxyswebapp.model.Graph;
 import com.mjh.innaxyswebapp.model.Node;
 
-// TODO Add JavaDoc comments.
+/**
+ * Class which allows for XML data to be parsed into a readable format that can be used
+ * to create nodes and edges. These created nodes and edges can then be turned into a graph
+ * so as to find the shortest path between two specified points. It is assumed that the XML 
+ * will follow a strict format. To parse the XML, this class utilises Java's built-in XML parser,
+ * where specifically StAX is used to ensure efficient utilisation of resources and avoid
+ * overheads. Various getters and setters are available so as to provide specific information 
+ * pertaining to the edge.
+ * 
+ * Both {@link com.mjh.innaxyswebapp.model.Node}, {@link com.mjh.innaxyswebapp.model.Edge} and 
+ * {@link com.mjh.innaxyswebapp.model.Graph} can be reviewed to find further information regarding 
+ * the class. 
+ * 
+ * @author	MaxMJH - MaxHarrisMJH@gmail.com
+ * @version 1.0
+ * @since 	02-10-2023
+ */
 public class XMLParsingUtility {
-	/*---- Fields ----*/
+	/*---- Field ----*/
+	/**
+	 * This variable stores the reader necessary to parse the XML.
+	 */
 	private XMLEventReader xmlReader;
 	
-	/*---- Constructor ----*/
+	/*---- Constructors ----*/
+	/**
+	 * Default constructor which essentially does nothing.
+	 */
 	public XMLParsingUtility() {}
 	
+	/**
+	 * Overloaded constructor which takes a string that points to an XML file that is contained
+	 * within the resources (resources/META-INF/resources/static/xml).
+	 * 
+	 * @param xmlPath 			  Name of the XML file.
+	 * @throws URISyntaxException Signifies that the specified XML file name was unable to be parsed.
+	 */
 	public XMLParsingUtility(String xmlPath) throws URISyntaxException {
 		// Hard code the XML location, if dynamic, point to the XML file outside of resources.
 		this(Path.of(XMLParsingUtility.class.getClassLoader().getResource("META-INF//resources//static//xml//" + xmlPath).toURI()).toFile());
 	}
 	
+	/**
+	 * Overloaded constructor which takes the specific XML file, and attempts to create an XML reader so
+	 * as to allow for parsing. If the file could not be opened, this will be logged, and will exit gracefully.
+	 * 
+	 * @param xmlFile File instance that points to the XML file.
+	 */
 	public XMLParsingUtility(File xmlFile) {
 		// Create an instance of the Javax XML library.
 		XMLInputFactory xmlInputFactory = XMLInputFactory.newInstance();
@@ -47,7 +82,16 @@ public class XMLParsingUtility {
 		}
 	}
 	
-	/*---- Methods ----*/
+	/*---- Method ----*/
+	/**
+	 * This method parses the specified XML and returns an instance of Graph. Depending
+	 * on the 'event', a respective instance of their value will be created. If the XML
+	 * contains an 'event' such as Node, this will then be populated etc. Once each
+	 * 'event' has been collected, they will be added to a an array, which will
+	 * then be passed to a instance of Graph.
+	 * 
+	 * @return An instance of Graph which is populated determined on the data in the XML.
+	 */
 	public Graph parseXML() {
 		// Conscious on complexity, so use hashmap as O(1) access is available.
 		// Instantiate a map to store all found nodes within the XML.
@@ -139,10 +183,20 @@ public class XMLParsingUtility {
 	}
 	
 	/*---- Getter and Setter ----*/
+	/**
+	 * This method returns the current parser.
+	 * 
+	 * @return The current parser.
+	 */
 	public XMLEventReader getXmlReader() {
 		return this.xmlReader;
 	}
 	
+	/**
+	 * This method sets the parser.
+	 * 
+	 * @param xmlReader Instance to set the parser to.
+	 */
 	public void setXmlReader(XMLEventReader xmlReader) {
 		this.xmlReader = xmlReader;
 	}
