@@ -2,6 +2,15 @@ package com.mjh.innaxyswebapp.model;
 
 import java.util.Objects;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+
 /**
  * Class which represents an edge (link) between two nodes. The edge itself
  * can have a distance (weight) attached to it. Various getters and setters
@@ -14,21 +23,35 @@ import java.util.Objects;
  * @version 1.0
  * @since 	02-10-2023
  */
+@Entity
+@Table(name = "edges")
 public class Edge {
 	/*---- Fields ----*/
 	/**
+	 * Variable to store the ID of an edge - mainly used by JPA.
+	 */
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
+	
+	/**
 	 * Variable to store the source node of the edge.
 	 */
+	@ManyToOne
+	@JoinColumn(name = "fk_node_source")
 	private Node source;
 	
 	/**
 	 * Variable to store the target node of the edge.
 	 */
+	@ManyToOne
+	@JoinColumn(name = "fk_node_target")
 	private Node target;
 	
 	/**
 	 * Variable to store that distance (weight) between the two nodes.
 	 */
+	@Column(name = "distance")
 	private int distance;
 	
 	/*---- Constructors ----*/
@@ -67,6 +90,24 @@ public class Edge {
 	}
 	
 	/*---- Getters and Setters ----*/
+	/**
+	 * Method to return the current edge's ID - mainly used by JPA.
+	 * 
+	 * @return The current edge's ID.
+	 */
+	public Long getId() {
+		return this.id;
+	}
+	
+	/**
+	 * Method to set the edge's ID - mainly used by JPA.
+	 * 
+	 * @param id
+	 */
+	public void setId(Long id) {
+		this.id = id;
+	}
+	
 	/**
 	 * Method to return the current edge's source node.
 	 * 

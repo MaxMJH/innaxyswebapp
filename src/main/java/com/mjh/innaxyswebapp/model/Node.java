@@ -2,6 +2,11 @@ package com.mjh.innaxyswebapp.model;
 
 import java.util.Objects;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+
 /** 
  * Class which represents a node. The node itself contains its name, as well as its x and y-axis
  * coordinates. Various getters and setters are available so as to provide specific information 
@@ -11,21 +16,27 @@ import java.util.Objects;
  * @version 1.0
  * @since 	02-10-2023
  */
+@Entity
+@Table(name = "nodes")
 public class Node {
 	/*---- Fields ----*/
 	/**
 	 * Variable to store the name of the node.
 	 */
+	@Id
+	@Column(name = "name")
 	private String name;
 	
 	/**
 	 * Variable to store the x-axis of the node.
 	 */
+	@Column(name = "x")
 	private int x;
 	
 	/**
 	 * Variable to store the y-axis of the node.
 	 */
+	@Column(name = "y")
 	private int y;
 	
 	/*---- Constructors ----*/
