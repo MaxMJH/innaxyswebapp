@@ -2,6 +2,10 @@ package com.mjh.innaxyswebapp.model;
 
 import org.springframework.stereotype.Component;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -29,26 +33,31 @@ import java.util.Queue;
  * @since 	02-10-2023
  */
 @Component
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Graph {
 	/*---- Fields ----*/
 	/**
-	 * Variable to store the a list of edges in the graph.
-	 */
-	private List<Edge> edges;
-	
-	/**
 	 * Variable to store the a list of nodes in the graph.
 	 */
+	@JsonProperty
 	private List<Node> nodes;
+	
+	/**
+	 * Variable to store the a list of edges in the graph.
+	 */
+	@JsonProperty
+	private List<Edge> edges;
 	
 	/**
 	 * Variable to store the adjacency list of the graph.
 	 */
+	@JsonIgnore
 	private Map<Node, Map<Node, Integer>> adjacencyList;
 	
 	/**
 	 * Variable to store an instance of {@link com.mjh.innaxyswebapp.model.Timer}.
 	 */
+	@JsonIgnore
 	private Timer timer;
 	
 	/*---- Constructor ----*/
@@ -59,12 +68,12 @@ public class Graph {
 	 * Constructor which initialises a graph based on the passed edges and nodes. 
 	 * This constructor will also generate an adjacency list.
 	 * 
-	 * @param edges The list containing edges.
 	 * @param nodes The list containing nodes.
+	 * @param edges The list containing edges.
 	 */
-	public Graph(List<Edge> edges, List<Node> nodes) {
-		this.edges = edges;
+	public Graph(List<Node> nodes, List<Edge> edges) {
 		this.nodes = nodes;
+		this.edges = edges;
 		this.adjacencyList = new HashMap<>();
 		this.timer = new Timer();
 		this.createAdjacencyList();
@@ -254,25 +263,6 @@ public class Graph {
 	
 	/*---- Getters and Setters ----*/
 	/**
-	 * Method to return all edges within the graph.
-	 * 
-	 * @return All edges within the graph.
-	 */
-	public List<Edge> getEdges() {
-		return this.edges;
-	}
-	
-	/**
-	 * Method which sets the edges within the graph, note that if this is done,
-	 * the adjacency matrix should be re-constructed.
-	 * 
-	 * @param edges Edges that should be used in the graph.
-	 */
-	public void setEdges(List<Edge> edges) {
-		this.edges = edges;
-	}
-	
-	/**
 	 * Method to return all nodes within the graph.
 	 * 
 	 * @return All nodes within the graph.
@@ -289,6 +279,25 @@ public class Graph {
 	 */
 	public void setNodes(List<Node> nodes) {
 		this.nodes = nodes;
+	}
+	
+	/**
+	 * Method to return all edges within the graph.
+	 * 
+	 * @return All edges within the graph.
+	 */
+	public List<Edge> getEdges() {
+		return this.edges;
+	}
+	
+	/**
+	 * Method which sets the edges within the graph, note that if this is done,
+	 * the adjacency matrix should be re-constructed.
+	 * 
+	 * @param edges Edges that should be used in the graph.
+	 */
+	public void setEdges(List<Edge> edges) {
+		this.edges = edges;
 	}
 	
 	/**

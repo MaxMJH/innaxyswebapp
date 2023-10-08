@@ -179,7 +179,7 @@ public class XMLParsingUtility {
 		}
 		
 		// Return a graph, with a populated adjacency list.
-		return new Graph(edges, new ArrayList<>(nodes.values()));
+		return new Graph(new ArrayList<>(nodes.values()), edges);
 	}
 	
 	/*---- Getter and Setter ----*/
