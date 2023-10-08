@@ -36,4 +36,20 @@ public interface NodeRepository extends JpaRepository<Node, String> {
     @Transactional
     @Query(value = "TRUNCATE TABLE edges", nativeQuery = true)
     void deleteAllEdges();
+	
+	/**
+	 * Method to check if the 'nodes' table exists within the database.
+	 * 
+	 * @return 0 if the 'nodes' table does not exist, >0 otherwise.
+	 */
+	@Query(value = "SELECT COUNT(*) FROM information_schema.tables WHERE table_name = 'nodes'", nativeQuery = true)
+	int tableExists();
+	
+	/**
+	 * Method to create the 'nodes' table.
+	 */
+	@Modifying
+	@Transactional
+	@Query(value = "CREATE TABLE nodes (name VARCHAR(255) NOT NULL, x INTEGER, y INTEGER, PRIMARY KEY (name))", nativeQuery = true)
+	void createNodesTable();
 }

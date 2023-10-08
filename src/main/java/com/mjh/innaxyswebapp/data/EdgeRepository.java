@@ -82,4 +82,36 @@ public interface EdgeRepository extends JpaRepository<Edge, Long> {
     @Transactional
     @Query(value = "DELETE FROM edges e WHERE e.target = ?1", nativeQuery = true)
     void deleteEdgeByTarget(String name);
+	
+	/**
+	 * Method to check if the 'edges' table exists within the database.
+	 * 
+	 * @return 0 if the 'edges' table does not exist, >0 otherwise.
+	 */
+	@Query(value = "SELECT COUNT(*) FROM information_schema.tables WHERE table_name = 'edges'", nativeQuery = true)
+	int tableExists();
+	
+	/**
+	 * Method to create the 'edges' table.
+	 */
+	@Modifying
+	@Transactional
+	@Query(value = "CREATE TABLE edges (id BIGSERIAL NOT NULL, distance INTEGER, source VARCHAR(255), target VARCHAR(255), PRIMARY KEY (id))", nativeQuery = true)
+	void createEdgesTable();
+	
+	/**
+	 * Method to set the source constraint for the 'edges' table.
+	 */
+	@Modifying
+	@Transactional
+	@Query(value = "ALTER TABLE IF EXISTS edges ADD CONSTRAINT FKgsoyaq0ea46pkspcqhge4ac14 FOREIGN KEY (source) REFERENCES nodes", nativeQuery = true)
+	void createSourceConstraint();
+	
+	/**
+	 * Method to set the target constraint for the 'edges' table.
+	 */
+	@Modifying
+	@Transactional
+	@Query(value = "ALTER TABLE IF EXISTS edges ADD CONSTRAINT FK5yt38t69hap9tbg042pt0qaaj FOREIGN KEY (target) REFERENCES nodes", nativeQuery = true)
+	void createTargetConstraint();
 }
