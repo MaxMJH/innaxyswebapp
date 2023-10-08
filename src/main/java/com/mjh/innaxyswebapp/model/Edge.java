@@ -38,14 +38,14 @@ public class Edge {
 	 * Variable to store the source node of the edge.
 	 */
 	@ManyToOne
-	@JoinColumn(name = "fk_node_source")
+	@JoinColumn(name = "source")
 	private Node source;
 	
 	/**
 	 * Variable to store the target node of the edge.
 	 */
 	@ManyToOne
-	@JoinColumn(name = "fk_node_target")
+	@JoinColumn(name = "target")
 	private Node target;
 	
 	/**
