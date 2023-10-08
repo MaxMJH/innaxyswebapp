@@ -119,4 +119,20 @@ public class NodeService {
 		this.nodeRepository.deleteAll();
 		this.nodeRepository.deleteAllEdges();
 	}
+	
+	/**
+	 * Method used to check if the 'nodes' table exists in the database.
+	 * 
+	 * @return true if the table exists, false otherwise.
+	 */
+	public boolean tableExists() {
+		return this.nodeRepository.tableExists() > 0;
+	}
+	
+	/**
+	 * Method used to ensure that the 'nodes' table exists even if deleted after application has started.
+	 */
+	public void createTable() {
+		this.nodeRepository.createNodesTable();
+	}
 }

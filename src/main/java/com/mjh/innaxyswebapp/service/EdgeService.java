@@ -174,4 +174,22 @@ public class EdgeService {
 	public void removeAll() {
 		this.edgeRepository.deleteAll();
 	}
+	
+	/**
+	 * Method used to check if the 'edges' table exists in the database.
+	 * 
+	 * @return true if the table exists, false otherwise.
+	 */
+	public boolean tableExists() {
+		return this.edgeRepository.tableExists() > 0;
+	}
+	
+	/**
+	 * Method used to ensure that the 'nodes' table exists even if deleted after application has started.
+	 */
+	public void createTable() {
+		this.edgeRepository.createEdgesTable();
+		this.edgeRepository.createSourceConstraint();
+		this.edgeRepository.createTargetConstraint();
+	}
 }
