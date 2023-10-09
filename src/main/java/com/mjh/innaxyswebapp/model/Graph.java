@@ -160,6 +160,10 @@ public class Graph {
 		// Set the source node's distance to 0.
 		distances.put(source, 0);
 		
+		// As distance has been updated, remove node from queue and re-add to set change.
+		queue.remove(source);
+		queue.add(source);
+		
 		// Iterate through the queue until it is empty (all nodes have their distances calculated from source).
 		// Effectively calculates the shortest path from the source node to all other nodes.
 		while(!queue.isEmpty()) {
