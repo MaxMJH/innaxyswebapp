@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.GetMapping;
  */
 @Controller
 public class GraphController {	
+	/*---- Method / Route ----*/
 	/**
 	 * Method used to return a blank index page. This page can be accessed via '/'.
 	 * 
