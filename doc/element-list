@@ -1,3 +1,7 @@
 com.mjh.innaxyswebapp
+com.mjh.innaxyswebapp.controller.api
+com.mjh.innaxyswebapp.controller.web
+com.mjh.innaxyswebapp.data
 com.mjh.innaxyswebapp.model
+com.mjh.innaxyswebapp.service
 com.mjh.innaxyswebapp.utility
