@@ -1,0 +1,75 @@
+:root {
+	--bs-body-font-family: 'Bebas Neue', sans-serif;
+}
+
+div#background {
+	z-index: -1;	
+}
+
+line {
+	stroke: #003D97;
+	stroke-width: 3px;
+}
+
+g.distance-label text {
+	font-size: 1.5em;
+	fill: #000000;
+}
+
+circle {
+	fill: #6C757D;
+}
+
+g text.node-label {
+	font-size: 2em;
+	fill: #FFFFFF;
+	pointer-events: none;
+}
+
+div#popover {
+  	min-width: 100px;
+  	min-height: 100px;
+  	visibility: hidden;
+  	position: absolute;
+    top: 151.5px;
+    left: 944.885px;
+    z-index: 1060;
+    display: block;
+    max-width: 276px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 1.5;
+    text-align: start;
+    text-decoration: none;
+    text-shadow: none;
+    text-transform: none;
+    letter-spacing: normal;
+    word-break: normal;
+    word-spacing: normal;
+    white-space: normal;
+    line-break: auto;
+    font-size: 0.875rem;
+    overflow-wrap: break-word;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-radius: 0.3rem;
+    background: white;
+}
+
+div#popover h2 {
+	text-align: center;
+  	padding: .5rem .75rem;
+  	margin-bottom: 0;
+  	font-size: 1.3rem;
+  	color: inherit;
+  	background-color: #f7f7f7;
+  	border-bottom: 1px solid #ebebeb;
+  	border-top-left-radius: calc(.3rem - 1px);
+  	border-top-right-radius: calc(.3rem - 1px);
+}
+
+div#popover p {
+	font-size: 1.25rem;
+	margin-top: 0;
+  	margin-bottom: 1rem;
+  	margin-left: 0.5rem;
+}
