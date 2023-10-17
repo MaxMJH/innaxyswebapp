@@ -16,7 +16,6 @@ import com.mjh.innaxyswebapp.model.Node;
 import com.mjh.innaxyswebapp.model.ShortestPath;
 import com.mjh.innaxyswebapp.service.GraphService;
 
-import jakarta.validation.constraints.Pattern;
 
 /**
  * Class which represents the controller used to handle API routes. It is expected for a JS script to send requests
@@ -68,10 +67,16 @@ public class GraphAPIController {
 	 * @return JSON form of {@link com.mjh.innaxyswebapp.model.ShortestPath}
 	 */
 	@GetMapping("/api/graph/shortestpath")
-	public ResponseEntity<ShortestPath> displayShortestPath(
-			@RequestParam @Pattern(regexp = "^[A-Z]{1}", message = "Source node failed to validate!") String source, 
-			@RequestParam @Pattern(regexp = "^[A-Z]{1}", message = "Target node failed to validate!") String target
-	) {
+	public ResponseEntity<ShortestPath> displayShortestPath(@RequestParam String source, @RequestParam String target) {
+		// Check to see if the input exceeds the a single capitalised letter.
+		// Note that this check is more for users sending their own requests,
+		// rather than requests made by the JS itself, as the nodes have predefined
+		// values.
+		if(!source.matches("^[A-Z]{1}") || !target.matches("^[A-Z]{1}")) {
+			// Throw a 500 error code with an error message.
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Input parameters failed to validate!");
+		}
+		
 		// Get an instance of 'Graph' from the 'GraphService';
 		Graph graph = this.graphService.getGraph();
 		
@@ -81,7 +86,7 @@ public class GraphAPIController {
 		// Check to see if the provided nodes are within the applicable range in the 'nodes' table.
 		if(!nodes.contains(new Node(source, 0, 0)) || !nodes.contains(new Node(target, 0, 0))) {
 			// Throw a 500 signifying that the selected nodes are not registered in the database.
-			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "displayShortestPath: The nodes you selected are not within the correct range!");
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "The nodes you selected are not within the correct range!");
 		}
 		
 		// Get the source and target nodes based on the selected nodes via their name.

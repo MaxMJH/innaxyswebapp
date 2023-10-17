@@ -170,8 +170,8 @@ d3.json('/api/graph').then(data => {
 
   // Define the tooltip used when an edge or node is hovered.
   const tooltip = d3.select('div#graph')
-  .append('div')
-    .attr('id', 'popover');
+    .append('div')
+      .attr('id', 'popover');
  
   tooltip.append("h2");
  
