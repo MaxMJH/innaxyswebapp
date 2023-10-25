@@ -6,6 +6,12 @@ div#background {
 	z-index: -1;	
 }
 
+svg#graph {
+	max-width: 800px;
+	width: 800px;
+	height: auto;
+}
+
 line {
 	stroke: #003D97;
 	stroke-width: 3px;
@@ -29,12 +35,11 @@ g text.node-label {
 div#popover {
   	min-width: 100px;
   	min-height: 100px;
-  	visibility: hidden;
   	position: absolute;
     top: 151.5px;
     left: 944.885px;
     z-index: 1060;
-    display: block;
+    display: none;
     max-width: 276px;
     font-style: normal;
     font-weight: 400;
@@ -48,7 +53,6 @@ div#popover {
     word-spacing: normal;
     white-space: normal;
     line-break: auto;
-    font-size: 0.875rem;
     overflow-wrap: break-word;
     border: 1px solid rgba(0, 0, 0, 0.2);
     border-radius: 0.3rem;
@@ -57,7 +61,6 @@ div#popover {
 
 div#popover h2 {
 	text-align: center;
-  	padding: .5rem .75rem;
   	margin-bottom: 0;
   	font-size: 1.3rem;
   	color: inherit;
@@ -72,4 +75,14 @@ div#popover p {
 	margin-top: 0;
   	margin-bottom: 1rem;
   	margin-left: 0.5rem;
+}
+
+@media (max-width: 652px) {
+	div#popover p {
+		font-size: 1.1rem;	
+	}
+	
+	div#popover h2 {
+		font-size: 1.2rem;
+	}
 }

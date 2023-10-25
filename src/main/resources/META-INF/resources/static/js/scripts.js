@@ -7,9 +7,12 @@ var selectedNodes = {};
 var edges = []
 
 // Set the size of the SVG, currently set to 800x800.
-const margin = {top: 30, right: 30, bottom: 30, left: 40};
+const margin = {top: 30, right: 50, bottom: 70, left: 50};
 const width = 800 - margin.left - margin.right;
 const height = 800 - margin.top - margin.bottom;
+
+// Set the radius of the nodes.
+const radius = 30;
 
 /*---- JSON Requests ----*/
 // Send a GET request to obtain the JSON at '/api/graph', which displays the entire graph.
@@ -33,7 +36,7 @@ d3.json('/api/graph').then(data => {
   });
   
   // Set an event listener for the 'Find Shortest Path' button.
-  $( '.btn-primary').on('click', function() {
+  $( '.btn-primary' ).on('click', function() {
 	// Send a GET request to obtain the JSON at '/api/graph/shortestpath/', which consists of data containing the shortest path from source to target.
     d3.json(`/api/graph/shortestpath?source=${source}&target=${target}`).then(shortestPath => {
 	  // Obtain each node within the shortest path.
@@ -76,8 +79,6 @@ d3.json('/api/graph').then(data => {
   /*---- Graph Creation ----*/
   // Select the SVG that will hold the actual graph, and set its size dynamically.
   const svg = d3.select('svg#graph')
-	.attr('width', width + margin.left + margin.right)
-	.attr('height', height + margin.top + margin.bottom)
 	.append('g')
 	  .attr('transform', `translate(${margin.left}, ${margin.top})`);
 
@@ -104,15 +105,15 @@ d3.json('/api/graph').then(data => {
 		// Check to see if the edge is currently already being hovered.
 		if(!tooltipShown) {
 		  // If not, obtain the position where the tooltip will show based on the x and y coordinates of the hovered edge.
-		  const x = ($('svg#graph').position().left) + (parseFloat(d.originalTarget.attributes.x1.value) + parseFloat(d.originalTarget.attributes.x2.value)) / 2 + ($( 'div#popover' ).width());
-		  const y = ($('svg#graph').position().top) + (parseFloat(d.originalTarget.attributes.y1.value) + parseFloat(d.originalTarget.attributes.y2.value)) / 2 - ($( 'div#popover' ).height() / 4);
+		  const x = ($(d.target).position().left + ($(d.target)[0].getBoundingClientRect().width / 2)) - ($( 'div#popover' ).width() / 2);
+		  const y = ($(d.target).position().top + ($(d.target)[0].getBoundingClientRect().height / 2)) + ($( 'div#popover' ).height() / 2);
 		  
 		  // Define the position and contents of the tooltip, and set visibility.
 		  tooltip.style('top', y + 'px')
             .style('left', x + 'px')
-            .style('visibility', 'visible')
+            .style('display', 'block')
             .select('h2')
-              .text(`${d.currentTarget.__data__.source.name} <--> ${d.currentTarget.__data__.target.name}`)
+              .text(`${d.currentTarget.__data__.source.name} ⬌ ${d.currentTarget.__data__.target.name}`)
               .style('text-align', 'center');
           
           // Set the inner-content of the tooltip with the hovered edge's distance.
@@ -134,7 +135,7 @@ d3.json('/api/graph').then(data => {
 	  })
 	  .on('mouseout', function(d) {
 		// Once the edge is no longer hovered, hide the tooltip.
-		tooltip.style('visibility', 'hidden');
+		tooltip.style('display', 'none');
 		
 		// Check to see if the once hovered node belongs to an edge in the shortest path.
 		if(!edges.some(e => (e.source.name === d.currentTarget.__data__.source.name && e.target.name === d.currentTarget.__data__.target.name) || (e.target.name === d.currentTarget.__data__.source.name && e.source.name === d.currentTarget.__data__.target.name))) {
@@ -187,13 +188,13 @@ d3.json('/api/graph').then(data => {
 		// Check to see if the node is currently already being hovered.
 		if(!tooltipShown) {
 		  // If not, obtain the position where the tooltip will show based on the x and y coordinates of the hovered node.
-		  const x = ($('svg#graph').position().left) + (parseFloat(d.originalTarget.attributes.cx.value) - 7.5);
-		  const y = ($('svg#graph').position().top) + (parseFloat(d.originalTarget.attributes.cy.value) - ($( 'div#popover' ).height() + 10));
+		  const x = $(d.target).position().left - (($( 'div#popover' ).width() - $(d.target)[0].getBoundingClientRect().width) / 2);
+		  const y = $(d.target).position().top + $(d.target)[0].getBoundingClientRect().height;
 		  
 		  // Define the position and contents of the tooltip, and set visibility - also set the textual contents pertaining to node data.
 		  tooltip.style('top', y + 'px')
             .style('left', x + 'px')
-            .style('visibility', 'visible')
+            .style('display', 'block')
             .select('h2')
               .text(d.target.parentElement.__data__.name)
               .style('text-align', 'center');
@@ -213,7 +214,7 @@ d3.json('/api/graph').then(data => {
 	  })
 	  .on('mouseout', function(d) {
 		// Once the node is no longer hovered, hide the tooltip.
-		tooltip.style('visibility', 'hidden');
+		tooltip.style('display', 'none');
 		
 		// Check to see if that when the currently hovered node is unhovered, if it has been selected.
 	    if(!(d.target.__data__.name in selectedNodes)) {
@@ -264,7 +265,7 @@ d3.json('/api/graph').then(data => {
 	.append('circle')
 	  .attr('cx', d => xScale(d.x))
 	  .attr('cy', d => yScale(d.y))
-	  .attr('r', 30)
+	  .attr('r', radius)
   
   // Set the name of the node inside the node itself.
   nodeGroups

@@ -21,7 +21,7 @@
   	  </div>
   	  <div class="row flex-fill fill d-flex">
   	    <div id="graph" class="col d-flex align-items-center justify-content-center">
-  	      <svg id="graph" width="900" height="900"></svg>
+  	      <svg id="graph" viewBox="0 0 800 800" xmlns="http://www.w3.org/2000/svg"></svg>
   	    </div>
   	  </div>
   	  <div class="container-fluid d-flex justify-content-center align-items-center">
